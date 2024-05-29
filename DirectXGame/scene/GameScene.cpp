@@ -105,8 +105,10 @@ GameScene::GameScene() {}
 GameScene::~GameScene() {
 
 	delete model_;
-
+	delete player_;
+	delete modelBlock_;
 	delete debugCamera_;
+	delete skydome_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -122,15 +124,25 @@ void GameScene::Initialize() {
 	input_ = Input::GetInstance();
 	audio_ = Audio::GetInstance();
 
+	//テクスチャ読み込み
+	textureHandle_ = TextureManager::Load("cube/cube.jpg");
+
+	// ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
+	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	texturehandle_ = TextureManager::Load("cube/cube.jpg");
-
-	// 3Dモデルの生成
+	// Player
 	model_ = Model::Create();
+	player_ = new Player();
+	player_->Initialize(model_, textureHandle_, &viewProjection_);
 
-	//デバッグカメラの作成
-	debugCamera_ = new DebugCamera(1280, 720);
+	// skydome
+	skydome_ = new Skydome();
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	skydome_->Initialize(modelSkydome_, &viewProjection_);
+
+	modelBlock_ = Model::Create();
 
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
@@ -150,38 +162,33 @@ void GameScene::Initialize() {
 	//ブロックの生成
 	for (uint32_t i = 0; i < kNumBlockVirtical; i++) {
 		for (uint32_t j = 0; j < kNumBlockHorizontal; j++) {
-			if (0 == (i + j) % 2)
-				continue;
-			worldTransformBlocks_[i][j] = new WorldTransform();
-			worldTransformBlocks_[i][j]->Initialize();
-			worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
-			worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
+			if (0 == (i + j) % 2) {
+				worldTransformBlocks_[i][j] = new WorldTransform();
+				worldTransformBlocks_[i][j]->Initialize();
+				worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
+				worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
+			}
+			else {
+				worldTransformBlocks_[i][j] = nullptr;
+			}
 		}
 	}
+
+	// デバッグカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
 }
+
 
 void GameScene::Update() {
 
-	// ブロックの更新
-	for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {
-		for (WorldTransform* worldTransformBlock : worldtransformBlockLine) {
-			if (!worldTransformBlock)
-				continue;
-			// アフィン変換行列の作成
-			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
-			// 定数バッファに転送する
-			worldTransformBlock->TransferMatrix();
-		}
-	}
-
-	//デバッグカメラの更新
-	debugCamera_->Update();
-
 #ifdef _DEBUG
-	if (input_->TriggerKey(DIK_0)) {
-		isDebugCameraActive_ = !isDebugCameraActive_;
+	if (input_->TriggerKey(DIK_SPACE)) {
+		if (isDebugCameraActive_ == true)
+			isDebugCameraActive_ = false;
+		else
+			isDebugCameraActive_ = true;
 	}
-#endif // DEBUG
+#endif
 
 	if (isDebugCameraActive_) {
 		debugCamera_->Update();
@@ -196,6 +203,23 @@ void GameScene::Update() {
 		viewProjection_.UpdateMatrix();
 	}
 
+	// ブロックの更新
+	for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {
+		for (WorldTransform* worldTransformBlock : worldtransformBlockLine) {
+			if (!worldTransformBlock)
+				continue;
+			// アフィン変換行列の作成
+			worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+			// 定数バッファに転送する
+			worldTransformBlock->TransferMatrix();
+		}
+	}
+
+	// 自キャラの更新
+	player_->Update();
+
+	// 天球の更新
+	skydome_->Update();
 }
 
 void GameScene::Draw() {
@@ -225,11 +249,17 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 	// ブロックの描画
+	
+	// 自キャラの描画
+	//player_->Draw();
+	// 天球の描画
+	skydome_->Draw();
+
 	for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldtransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
-			model_->Draw(*worldTransformBlock, viewProjection_, texturehandle_);
+			modelBlock_->Draw(*worldTransformBlock, viewProjection_, textureHandle_);
 		}
 	}
 
