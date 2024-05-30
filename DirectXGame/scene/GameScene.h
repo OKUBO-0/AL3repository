@@ -4,7 +4,6 @@
 #include "DebugCamera.h"
 #include "DirectXCommon.h"
 #include "Input.h"
-#include "MapChipField.h"
 #include "Model.h"
 #include "SafeDelete.h"
 #include "Player.h"
@@ -38,11 +37,6 @@ public: // メンバ関数
 	/// 初期化
 	/// </summary>
 	void Initialize();
-
-	/// <summary>
-	/// ブロックの表示
-	/// </summary>
-	void GenerateBlocks();
 
 	/// <summary>
 	/// 毎フレーム処理
@@ -104,7 +98,4 @@ private: // メンバ変数
 	Skydome* skydome_ = nullptr;
 	// 3Dモデル
 	Model* modelSkydome_ = nullptr;
-
-	// マップチップフィールド
-	MapChipField* mapChipField_;
 };
