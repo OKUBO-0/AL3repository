@@ -40,6 +40,11 @@ public: // メンバ関数
 	void Initialize();
 
 	/// <summary>
+	/// ブロックの表示
+	/// </summary>
+	void GenerateBlocks();
+
+	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
@@ -99,4 +104,7 @@ private: // メンバ変数
 	Skydome* skydome_ = nullptr;
 	// 3Dモデル
 	Model* modelSkydome_ = nullptr;
+
+	// マップチップフィールド
+	MapChipField* mapChipField_;
 };

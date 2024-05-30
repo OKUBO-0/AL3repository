@@ -75,3 +75,6 @@ Vector3 MapChipField::GetMapChipPostionByIndex(uint32_t xIndex, uint32_t yIndex)
 
 	return Vector3(kBlockWidth * xIndex, kBlockHeight * (kNumBlockVirtical - 1 - yIndex), 0);
 }
+
+uint32_t MapChipField::GetNumBlockVirtical() const { return kNumBlockVirtical; }
+uint32_t MapChipField::GetNumBlockHorizontal() const { return kNumBlockVirtical; }
