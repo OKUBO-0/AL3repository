@@ -255,7 +255,7 @@ void GameScene::Draw() {
 		for (WorldTransform* worldTransformBlock : worldtransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
-			modelBlock_->Draw(*worldTransformBlock, viewProjection_, textureHandle_);
+			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
 	}
 
