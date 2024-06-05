@@ -126,17 +126,16 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("cube/cube.jpg");
+	textureHandle_ = TextureManager::Load("uvChecker.png");
 
-	// ワールドトランスフォームの初期化
-	worldTransform_.Initialize();
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
 	// Player
-	model_ = Model::Create();
 	player_ = new Player();
-	player_->Initialize(model_, textureHandle_, &viewProjection_);
+	model_ = Model::Create();
+	Vector3 playerPosition = mapChipField_->GetMapChipPostionByIndex(100, 100);
+	player_->Initialize(model_, &viewProjection_, playerPosition);
 
 	// skydome
 	skydome_ = new Skydome();
@@ -147,6 +146,8 @@ void GameScene::Initialize() {
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	GenerateBlocks();
+
+	// ブロック
 	modelBlock_ = Model::Create();
 
 	// デバッグカメラの生成
@@ -253,17 +254,17 @@ void GameScene::Draw() {
 	// ブロックの描画
 	
 	// 自キャラの描画
-	//player_->Draw();
+	player_->Draw();
 	// 天球の描画
 	skydome_->Draw();
 
-	for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {
+	/*for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldtransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
-			modelBlock_->Draw(*worldTransformBlock, viewProjection_, textureHandle_);
+			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
-	}
+	}*/
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();

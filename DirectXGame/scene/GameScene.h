@@ -80,29 +80,21 @@ private: // メンバ変数
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 
-	// 3Dモデル
-	Model* model_ = nullptr;
-	Model* modelBlock_ = nullptr;
-
-	// ワールドトランスフォーム
-	WorldTransform worldTransform_;
-	// ビュープロジェクション
-	ViewProjection viewProjection_;
-
 	// 自キャラ
 	Player* player_ = nullptr;
+	Model* model_ = nullptr;
+	ViewProjection viewProjection_;
 
 	// 縦横ブロック配列
+	Model* modelBlock_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
-	// デバッグカメラ有効
-	bool isDebugCameraActive_ = false;
 	// デバッグカメラ
+	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
 
 	//天球
 	Skydome* skydome_ = nullptr;
-	// 3Dモデル
 	Model* modelSkydome_ = nullptr;
 
 	// マップチップフィールド
