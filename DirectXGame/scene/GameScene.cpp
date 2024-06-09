@@ -126,15 +126,15 @@ void GameScene::Initialize() {
 	audio_ = Audio::GetInstance();
 
 	//テクスチャ読み込み
-	textureHandle_ = TextureManager::Load("uvChecker.png");
+	textureHandle_ = TextureManager::Load("player.png");
 
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
 	// Player
 	player_ = new Player();
-	model_ = Model::Create();
-	Vector3 playerPosition = mapChipField_->GetMapChipPostionByIndex(100, 100);
+	model_ = Model::CreateFromOBJ("player", true);
+	Vector3 playerPosition = mapChipField_->GetMapChipPostionByIndex(5, 18);
 	player_->Initialize(model_, &viewProjection_, playerPosition);
 
 	// skydome
@@ -258,13 +258,13 @@ void GameScene::Draw() {
 	// 天球の描画
 	skydome_->Draw();
 
-	/*for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {
+	for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldtransformBlockLine) {
 			if (!worldTransformBlock)
 				continue;
 			modelBlock_->Draw(*worldTransformBlock, viewProjection_);
 		}
-	}*/
+	}
 
 	// 3Dオブジェクト描画後処理
 	Model::PostDraw();
