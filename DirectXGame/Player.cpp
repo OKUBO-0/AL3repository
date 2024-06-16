@@ -6,19 +6,16 @@
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	assert(model);
+	model_ = model;
 	// 引数の内容をメンバ変数に記録
 	viewProjection_ = viewProjection;
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
-
-	model_ = model;
-	//textureHandle_ = textureHandle;
 };
 
 void Player::Update() {
-	worldTransform_.TransferMatrix();
 
 	// 移動入力
 	// 左右移動操作
@@ -71,7 +68,7 @@ void Player::Update() {
 		if (Input::GetInstance()->PushKey(DIK_UP)) {
 
 			velocity_.x += 0;
-			velocity_.y += kJampAcceleration;
+			velocity_.y += kJumpAcceleration;
 			velocity_.z += 0;
 		}
 
@@ -79,7 +76,7 @@ void Player::Update() {
 	else {
 		// 落下速度
 		velocity_.x += 0;
-		velocity_.y += -kGravityAccleration;
+		velocity_.y += -kGravityAcceleration;
 		velocity_.z += 0;
 		// 落下速度制限
 
@@ -149,5 +146,5 @@ void Player::Update() {
 
 void Player::Draw() {
 	// 3Dモデルを描画
-	model_->Draw(worldTransform_, *viewProjection_, textureHandle_);
+	model_->Draw(worldTransform_, *viewProjection_);
 };

@@ -1,34 +1,49 @@
 ﻿#pragma once
 
-#include "Model.h"
+#include "ViewProjection.h"
 
 class Player;
 
-class CameraController{
+class CameraController {
 
 public:
+	struct Rect {
+		float left = 0.0f;
+		float right = 1.0f;
+		float bottom = 0.0f;
+		float top = 1.0f;
+	};
+
 	/// <summary>
 	/// 初期化
 	/// </summary>
 	void Initialize();
 
 	/// <summary>
-	/// 更新
+	/// 毎フレーム処理
 	/// </summary>
 	void Update();
 
-
-private:
-
-	// ビュープロジェクション
-	ViewProjection* viewProjection_ = nullptr;
-
-	// player
-	Player* target_ = nullptr;
-	void SetTarget(Player* target) { target_ = target; }
 	void Reset();
 
-	// カメラ
-	Vector3 targetOffset_ = { 0, 0, -15.0f };
+	const ViewProjection& GetViewProjection() const { 
+		return viewProjection_; 
+	}
+	void SetTarget(Player* target) { target_ = target; }
+	void SetMovableArea(Rect area) { movableArea_ = area; }
 
+private:
+	ViewProjection viewProjection_;
+	Player* target_ = nullptr;
+	Vector3 targetOffset_ = { 0.0f, 0.0f, -15.0f };
+	Rect movableArea_ = { 0, 100, 0, 100 };
+	Vector3 targetCameraPosition;//カメラの目標座標
+	static inline const float kInterpolationRate = 0.5f;
+	static inline const float kVelocityBias = 10.0f;
+	Rect mergeArea = {
+		0.0f,
+		20.0f,
+		0.0f,
+		20.0f,
+	};
 };

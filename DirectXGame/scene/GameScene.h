@@ -15,6 +15,7 @@
 #include "Vector3.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
+#include "Matrix.h"
 
 #include <cmath>
 #include <vector>
@@ -102,5 +103,5 @@ private: // メンバ変数
 	MapChipField* mapChipField_;
 
 	// 追従カメラ
-	CameraController* cameraController_;
+	CameraController* cameraController_ = nullptr;
 };
