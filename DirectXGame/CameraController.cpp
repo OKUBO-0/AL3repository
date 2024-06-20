@@ -1,6 +1,11 @@
 ﻿#define NOMINMAX
 #include "CameraController.h"
 #include "Player.h"
+#include <algorithm>
+
+void CameraController::Initialize() {
+	viewProjection_.Initialize(); 
+}
 
 void CameraController::Update() {
 	// 追尾対象のワールドトランスフォームを参照

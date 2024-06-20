@@ -1,22 +1,16 @@
 ﻿#define NOMINMAX
 #include "Player.h"
-#include <numbers>
-#include <Input.h>
-#include <algorithm>
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
 	assert(model);
 	model_ = model;
-	// 引数の内容をメンバ変数に記録
-	viewProjection_ = viewProjection;
-	//ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
+	viewProjection_ = viewProjection;
 };
 
 void Player::Update() {
-
 	// 移動入力
 	// 左右移動操作
 	if (onGround_) {
@@ -33,7 +27,7 @@ void Player::Update() {
 				if (lrDirection_ != LRDirection::kRight) {
 					lrDirection_ = LRDirection::kRight;
 					turnFirstRotationY_ = worldTransform_.rotation_.y;
-					turnTimer_ = 0.5f;
+					turnTimer_ = kLimitRunSpeed;
 				}
 
 				accceleration.x += kAcceleration;
@@ -47,7 +41,7 @@ void Player::Update() {
 				if (lrDirection_ != LRDirection::kLeft) {
 					lrDirection_ = LRDirection::kLeft;
 					turnFirstRotationY_ = worldTransform_.rotation_.y;
-					turnTimer_ = 0.5f;
+					turnTimer_ = kLimitRunSpeed;
 				}
 
 				accceleration.x -= kAcceleration;
@@ -94,7 +88,7 @@ void Player::Update() {
 		// 状態に応じた角度を取得する
 		float destinationRotationY = destinationRotationYTable[static_cast<uint32_t>(lrDirection_)];
 		// 自キャラの角度を設定する
-		worldTransform_.rotation_.y = destinationRotationY;
+		worldTransform_.rotation_.y = destinationRotationY * EaseOutSine(turnTimer_);
 		;
 		;
 	}
@@ -148,3 +142,7 @@ void Player::Draw() {
 	// 3Dモデルを描画
 	model_->Draw(worldTransform_, *viewProjection_);
 };
+
+float Player::EaseOutSine(float x) {
+	return cosf((x * std::numbers::pi_v<float>) / 2); 
+}

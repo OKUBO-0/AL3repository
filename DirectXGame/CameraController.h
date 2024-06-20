@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include "ViewProjection.h"
 
 class Player;
@@ -26,7 +25,7 @@ public:
 
 	void Reset();
 
-	const ViewProjection& GetViewProjection() const { 
+	const ViewProjection& GetViewProjection() const {
 		return viewProjection_; 
 	}
 	void SetTarget(Player* target) { target_ = target; }

@@ -166,7 +166,6 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rotate, const Ve
 }
 
 
-#pragma region Add
 Matrix4x4 Add(const Matrix4x4& mt1, const Matrix4x4& mt2)
 {
 
@@ -199,9 +198,7 @@ Matrix4x4 Add(const Matrix4x4& mt1, const Matrix4x4& mt2)
 
 
 }
-#pragma endregion 
 
-#pragma region Subtract
 Matrix4x4 Subtract(const Matrix4x4& mt1, const Matrix4x4& mt2)
 {
 
@@ -233,9 +230,7 @@ Matrix4x4 Subtract(const Matrix4x4& mt1, const Matrix4x4& mt2)
 
 
 }
-#pragma endregion
 
-#pragma region Multiply
 Matrix4x4 Multiply(const Matrix4x4& mt1, const Matrix4x4& mt2)
 {
 
@@ -254,9 +249,7 @@ Matrix4x4 Multiply(const Matrix4x4& mt1, const Matrix4x4& mt2)
 	return ans;
 
 }
-#pragma endregion 
 
-#pragma region Inverse
 Matrix4x4 Inverse(const Matrix4x4& m) {
 	float determinant =
 		+m.m[0][0] * m.m[1][1] * m.m[2][2] * m.m[3][3]
@@ -347,9 +340,7 @@ Matrix4x4 Inverse(const Matrix4x4& m) {
 
 	return result;
 }
-#pragma endregion
 
-#pragma region Transpose
 Matrix4x4 Transpose(const Matrix4x4& mt1)
 {
 
@@ -380,7 +371,6 @@ Matrix4x4 Transpose(const Matrix4x4& mt1)
 	return ans;
 
 }
-#pragma endregion 
 
 
 Matrix4x4 MekeIdentity4x4()

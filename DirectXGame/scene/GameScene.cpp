@@ -94,28 +94,8 @@ void GameScene::GenerateBlocks() {
 
 
 void GameScene::Update() {
-
-#ifdef _DEBUG
-	if (input_->TriggerKey(DIK_SPACE)) {
-		if (isDebugCameraActive_ == true)
-			isDebugCameraActive_ = false;
-		else
-			isDebugCameraActive_ = true;
-	}
-#endif
-
-	if (isDebugCameraActive_) {
-		debugCamera_->Update();
-		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
-		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
-		//ビュープロジェクション行列の転送
-		viewProjection_.TransferMatrix();
-	}
-	else
-	{
-		//ビュープロジェクション行列の更新と転送
-		viewProjection_.UpdateMatrix();
-	}
+	player_->Update();
+	cameraController_->Update();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {
@@ -129,13 +109,26 @@ void GameScene::Update() {
 		}
 	}
 
-	// 自キャラの更新
-	player_->Update();
+#ifdef _DEBUG
+	if (input_->TriggerKey(DIK_C)) {
 
-	// 天球の更新
-	skydome_->Update();
+		isDebugCameraActive_ = true;
+	}
+#endif
 
-	cameraController_->Update();
+	if (isDebugCameraActive_) {
+		debugCamera_->Update();
+		viewProjection_.matView = debugCamera_->GetViewProjection().matView;
+		viewProjection_.matProjection = debugCamera_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列
+		viewProjection_.TransferMatrix();
+	}
+	else {
+		viewProjection_.matView = cameraController_->GetViewProjection().matView;
+		viewProjection_.matProjection = cameraController_->GetViewProjection().matProjection;
+		// ビュープロジェクション行列の更新と転送
+		viewProjection_.TransferMatrix();
+	}
 }
 
 void GameScene::Draw() {

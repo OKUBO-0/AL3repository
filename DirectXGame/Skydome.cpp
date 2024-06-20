@@ -2,8 +2,10 @@
 
 void Skydome::Initialize(Model* model, ViewProjection* viewProjection) {
 
-	worldTransform_.Initialize();
+	assert(model);
 	model_ = model;
+
+	worldTransform_.Initialize();
 	viewProjection_ = viewProjection;
 }
 

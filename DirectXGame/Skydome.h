@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <Model.h>
 #include "WorldTransform.h"
-#include "Viewprojection.h"
+#include <assert.h>
 class Skydome {
 
 public:
