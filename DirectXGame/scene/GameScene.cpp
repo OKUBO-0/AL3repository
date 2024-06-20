@@ -34,21 +34,28 @@ void GameScene::Initialize() {
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
-	// Player
-	player_ = new Player();
-	model_ = Model::CreateFromOBJ("player", true);
-	Vector3 playerPosition = mapChipField_->GetMapChipPostionByIndex(5, 18);
-	player_->Initialize(model_, &viewProjection_, playerPosition);
-
 	// skydome
 	skydome_ = new Skydome();
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_->Initialize(modelSkydome_, &viewProjection_);
 
+	// ブロック
+	modelBlock_ = Model::Create();
+
+	// デバッグカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
+
 	// マップチップ
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/map.csv");
 	GenerateBlocks();
+
+	// Player
+	player_ = new Player();
+	model_ = Model::CreateFromOBJ("player", true);
+	Vector3 playerPosition = mapChipField_->GetMapChipPostionByIndex(5, 18);
+	player_->Initialize(model_, &viewProjection_, playerPosition);
+	player_->SetMapChipFiled(mapChipField_);
 
 	// CameraController
 	CameraController::Rect cameraArea = { 12.0f, 100 - 12.0f, 6.0f, 6.0f };
@@ -58,29 +65,24 @@ void GameScene::Initialize() {
 	cameraController_->SetMovableArea(cameraArea);
 	cameraController_->Reset();
 
-	// ブロック
-	modelBlock_ = Model::Create();
-
-	// デバッグカメラの生成
-	debugCamera_ = new DebugCamera(1280, 720);
 }
 
 
 void GameScene::GenerateBlocks() {
 	// 要素数
-	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();     // 縦
+	uint32_t numBlockVertical = mapChipField_->GetNumBlockVertical();     // 縦
 	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal(); // 横
 
 	// 要素数を変更する
 	// 列数を設定(縦方向のブロック数)
-	worldTransformBlocks_.resize(numBlockVirtical);
-	for (uint32_t i = 0; i < numBlockVirtical; i++) {
+	worldTransformBlocks_.resize(numBlockVertical);
+	for (uint32_t i = 0; i < numBlockVertical; i++) {
 		//1列の要素数を設定(横方向のブロック数)
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
 	}
 
 	//ブロックの生成
-	for (uint32_t i = 0; i < numBlockVirtical; i++) {
+	for (uint32_t i = 0; i < numBlockVertical; i++) {
 		for (uint32_t j = 0; j < numBlockHorizontal; j++) {
 			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
 				WorldTransform* worldTransform = new WorldTransform();
