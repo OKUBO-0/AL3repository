@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "Input.h"
 #include "Model.h"
-#include "ViewProjection.h"
 #include "WorldTransform.h"
 #include "assert.h"
 #include <algorithm>
