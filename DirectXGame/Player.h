@@ -61,9 +61,11 @@ public:
 	void CeilingCollisionMove(const CollisionMapInfo& info);
 
 	void CollisionMapInfoTop(CollisionMapInfo& info);
-	void CollisionMapInfoBootm(CollisionMapInfo& info);
+	void CollisionMapInfoBottom(CollisionMapInfo& info);
 	void CollisionMapInfoRight(CollisionMapInfo& info);
 	void CollisionMapInfoLeft(CollisionMapInfo& info);
+
+	void SwitchGroundState(CollisionMapInfo& info);
 
 private:
 	WorldTransform worldTransform_;             // ワールド変換データ
@@ -92,4 +94,7 @@ private:
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 	static inline const float kBlank = 1.0;
+
+	//着地時の速度減衰率
+	static inline const float kAttenuationLanding = 0.01f;
 };
