@@ -85,7 +85,7 @@ private:
 	//ジャンプ
 	bool onGround_ = true;                                  // 接点状態フラグ
 	static inline const float kGravityAcceleration = 0.1f;  //重力加速度
-	static inline const float kLimitFallSpeed = 0.3f;       //最大落下速度
+	static inline const float kLimitFallSpeed = 0.5f;       //最大落下速度
 	static inline const float kJumpAcceleration = 1.0f;     //ジャンプ初速
 
 	MapChipField* mapChipFiled_ = nullptr;
