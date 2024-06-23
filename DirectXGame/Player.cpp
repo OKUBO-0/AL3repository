@@ -1,6 +1,7 @@
 ﻿#define NOMINMAX
 #include "Player.h"
 #include "MapChipField.h"
+#include "Matrix.h"
 #include <DebugText.h>
 
 void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vector3& position) {
@@ -246,7 +247,7 @@ void Player::CollisionMapInfoTop(CollisionMapInfo& info) {
 	}
 }
 
-void Player::CollisionMapInfoBootm(CollisionMapInfo& info) {
+void Player::CollisionMapInfoBottom(CollisionMapInfo& info) {
 	if (info.move.y >= 0) {
 		return;
 	}
@@ -373,6 +374,67 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 		info.move.x = std::min(0.0f, rect.right - worldTransform_.translation_.x + kWidth / 2 + kBlank);
 		//地面に当たったことを記録する
 		info.ceiling = true;
+	}
+}
+
+void Player::SwitchGroundState(CollisionMapInfo& info) {
+	if (onGround_ == true) {
+
+		//ジャンプ開始
+		if (velocity_.y >= 0.0f) {
+			//空中状態に切り替える
+			onGround_ = false;
+		}
+		else {
+
+			//移動後の4つの角の座標
+			std::array<Vector3, kNumCorner> positionsNew;
+
+			for (uint32_t i = 0; i < positionsNew.size(); i++) {
+				positionsNew[i] = CornerPosition(
+					Add(worldTransform_.translation_, info.move),
+					static_cast<Corner>(i));
+			}
+
+			MapChipType mapChipType;
+			//真下の当たり判定をとる
+			bool hit = false;
+
+			//左下の角の判定
+			IndexSet indexSet;
+			indexSet = mapChipFiled_->GetMapChipIndexSetByPosition(MyMath::Add(positionsNew[kLeftBottom], Vector3(0, -kBlank, 0)));
+			mapChipType = mapChipFiled_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+			if (mapChipType == MapChipType::kBlock) {
+				hit = true;
+			}
+			//右下の角の判定
+			indexSet = mapChipFiled_->GetMapChipIndexSetByPosition(MyMath::Add(positionsNew[kRightBottom], Vector3(0, -kBlank, 0)));
+			mapChipType = mapChipFiled_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+			if (mapChipType == MapChipType::kBlock) {
+				hit = true;
+			}
+
+			//落下開始
+			if (!hit) {
+				//空中状態へ切り替える
+				onGround_ = false;
+			}
+		}
+
+	}
+	else {
+
+		if (info.landing == true) {
+
+			//着地状態に切り替える
+			onGround_ = true;
+
+			//着地時にX速度を減衰
+			velocity_.x *= (1.0f - kAttenuationLanding);
+			//Y速度を0にする
+			velocity_.y = 0.0f;
+			info.landing = false;
+		}
 	}
 }
 
