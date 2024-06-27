@@ -49,7 +49,7 @@ public:
 
 	void PlayerMove();
 
-	void PrayerTurn();
+	void PlayerTurn();
 
 	float EaseOutSine(float x);
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
@@ -87,10 +87,10 @@ private:
 	static inline const float KtimeTurn = 0.5f;       // 角度補間タイム
 												      
 	//ジャンプ
-	bool onGround_ = true;                                  // 接点状態フラグ
+	bool onGround_ = true;                                   // 接点状態フラグ
 	static inline const float kGravityAcceleration = 0.05f;  //重力加速度
-	static inline const float kLimitFallSpeed = 1.0f;       //最大落下速度
-	static inline const float kJumpAcceleration = 0.7f;     //ジャンプ初速
+	static inline const float kLimitFallSpeed = 1.0f;        //最大落下速度
+	static inline const float kJumpAcceleration = 0.7f;      //ジャンプ初速
 
 	MapChipField* mapChipField_ = nullptr;
 	static inline const float kWidth = 0.8f;

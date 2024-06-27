@@ -29,7 +29,7 @@ void Player::Update() {
 	HitWallCollisionMove(collisionMapInfo);
 	worldTransform_.UpdateMatrix();
 
-	PrayerTurn();
+	PlayerTurn();
 
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
@@ -46,7 +46,7 @@ void Player::PlayerMove() {
 		// 左右移動操作
 		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
 			// 左右加速
-			Vector3 accceleration = {};
+			Vector3 acceleration = {};
 			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
 
 				if (velocity_.x < 0.0f) {
@@ -59,7 +59,7 @@ void Player::PlayerMove() {
 					turnTimer_ = kLimitRunSpeed;
 				}
 
-				accceleration.x += kAcceleration;
+				acceleration.x += kAcceleration;
 
 			}
 			else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
@@ -73,11 +73,11 @@ void Player::PlayerMove() {
 					turnTimer_ = kLimitRunSpeed;
 				}
 
-				accceleration.x -= kAcceleration;
+				acceleration.x -= kAcceleration;
 			}
-			velocity_.x += accceleration.x;
-			velocity_.y += accceleration.y;
-			velocity_.z += accceleration.z;
+			velocity_.x += acceleration.x;
+			velocity_.y += acceleration.y;
+			velocity_.z += acceleration.z;
 
 			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
 		}
@@ -104,7 +104,7 @@ void Player::PlayerMove() {
 	}
 }
 
-void Player::PrayerTurn() {
+void Player::PlayerTurn() {
 	if (turnTimer_ > 0.0f) {
 		turnTimer_ -= 1.0f / 60.0f;
 
