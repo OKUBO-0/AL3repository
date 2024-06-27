@@ -49,23 +49,25 @@ public:
 
 	void PlayerMove();
 
+	void PrayerTurn();
+
 	float EaseOutSine(float x);
 	const WorldTransform& GetWorldTransform() { return worldTransform_; }
 	const Vector3& GetVelocity() const { return velocity_; }
-	void SetMapChipFiled(MapChipField* mapChipFiled) { mapChipFiled_ = mapChipFiled; }
+	void SetMapChipFiled(MapChipField* mapChipFiled) { mapChipField_ = mapChipFiled; }
 
 	// 衝突判定
 	void MapCollision(CollisionMapInfo& info);
 	Vector3 CornerPosition(const Vector3& centor, Corner corner);
 	void PlayerCollisionMove(const CollisionMapInfo& inffo);
 	void CeilingCollisionMove(const CollisionMapInfo& info);
+	void OnGroundSwitching(const CollisionMapInfo& info);
+	void HitWallCollisionMove(const CollisionMapInfo& info);
 
 	void CollisionMapInfoTop(CollisionMapInfo& info);
 	void CollisionMapInfoBottom(CollisionMapInfo& info);
 	void CollisionMapInfoRight(CollisionMapInfo& info);
 	void CollisionMapInfoLeft(CollisionMapInfo& info);
-
-	void SwitchGroundState(CollisionMapInfo& info);
 
 private:
 	WorldTransform worldTransform_;             // ワールド変換データ
@@ -86,15 +88,15 @@ private:
 												      
 	//ジャンプ
 	bool onGround_ = true;                                  // 接点状態フラグ
-	static inline const float kGravityAcceleration = 0.1f;  //重力加速度
-	static inline const float kLimitFallSpeed = 0.5f;       //最大落下速度
-	static inline const float kJumpAcceleration = 1.0f;     //ジャンプ初速
+	static inline const float kGravityAcceleration = 0.05f;  //重力加速度
+	static inline const float kLimitFallSpeed = 1.0f;       //最大落下速度
+	static inline const float kJumpAcceleration = 0.7f;     //ジャンプ初速
 
-	MapChipField* mapChipFiled_ = nullptr;
+	MapChipField* mapChipField_ = nullptr;
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 	static inline const float kBlank = 1.0;
-
-	//着地時の速度減衰率
-	static inline const float kAttenuationLanding = 0.01f;
+	static inline const float kAttenuationLanding = 0.1f;
+	static inline const float kCollisionsmallnumber = 0.1f;
+	static inline const float kAttenuationWall = 0.1f;
 };

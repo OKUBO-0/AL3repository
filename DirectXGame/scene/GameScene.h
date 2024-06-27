@@ -61,6 +61,7 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
+	
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0;
 
@@ -86,4 +87,6 @@ private: // メンバ変数
 
 	// 追従カメラ
 	CameraController* cameraController_ = nullptr;
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 };
