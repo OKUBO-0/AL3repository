@@ -475,3 +475,10 @@ Vector3 Lerp(const Vector3& a, const Vector3& b, float t) {
 
 	return ans;
 }
+
+float fLerp(float a, float b, float t) {
+	float  ans;
+
+	ans = t * a + (1.0f - t) * b;
+	return ans;
+}

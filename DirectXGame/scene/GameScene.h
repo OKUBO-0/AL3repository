@@ -3,6 +3,7 @@
 #include "Audio.h"
 #include "DebugCamera.h"
 #include "DirectXCommon.h"
+#include "Enemy.h"
 #include "Input.h"
 #include "MapChipField.h"
 #include "Model.h"
@@ -89,4 +90,8 @@ private: // メンバ変数
 	CameraController* cameraController_ = nullptr;
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+	// Enemy
+	Model* enemyModel_ = nullptr;
+	Enemy* enemy_ = nullptr;
 };

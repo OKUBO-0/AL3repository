@@ -58,3 +58,4 @@ const Vector3 operator*(const Vector3& v1, const float& v2);
 Matrix4x4 MakeIdentity4x4();
 
 Vector3 Lerp(const Vector3& a, const Vector3& b, float t);
+float fLerp(float a, float b, float t);
