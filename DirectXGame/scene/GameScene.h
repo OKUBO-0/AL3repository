@@ -82,7 +82,7 @@ private: // メンバ変数
 	// 天球
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
-
+	
 	// マップチップフィールド
 	MapChipField* mapChipField_;
 
@@ -94,4 +94,5 @@ private: // メンバ変数
 	// Enemy
 	Model* enemyModel_ = nullptr;
 	Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemies_;
 };

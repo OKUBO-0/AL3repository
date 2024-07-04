@@ -78,7 +78,7 @@ private:
 	Vector3 velocity_ = {};                           // 速度
 	static inline const float kAcceleration = 0.01f;  // 定数加速度
 	static inline const float kAttenuation = 0.2f;    //速度減衰率
-	static inline const float kLimitRunSpeed = 1.0f;  //最大速度制限
+	static inline const float kLimitRunSpeed = 0.5f;  //最大速度制限
 
 	//振り向き
 	LRDirection lrDirection_ = LRDirection::kRight;
