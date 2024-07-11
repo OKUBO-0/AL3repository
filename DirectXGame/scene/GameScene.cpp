@@ -21,6 +21,8 @@ GameScene::~GameScene() {
 			delete worldTransformBlock;
 		}
 	}
+
+
 	worldTransformBlocks_.clear();
 }
 
@@ -60,10 +62,14 @@ void GameScene::Initialize() {
 	player_->SetMapChipFiled(mapChipField_);
 
 	//Enemy
-	enemy_ = new Enemy();
+	for (int32_t i = 0; i < 2; ++i) {
+		enemy_ = new Enemy();
+	    Vector3 enemyPostion = mapChipField_->GetMapChipPostionByIndex(10+i, 18+i);
+		enemy_->Initialize(enemyModel_, &viewProjection_, enemyPostion);
+
+		enemies_.push_back(enemy_);
+	}
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
-	Vector3 enemyPostion = mapChipField_->GetMapChipPostionByIndex(10, 18);
-	enemy_->Initialize(enemyModel_, &viewProjection_, enemyPostion);
 
 	// CameraController
 	CameraController::Rect cameraArea = { 0.0f, 100 - 12.0f, 6.0f, 6.0f };
