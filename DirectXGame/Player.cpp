@@ -15,6 +15,7 @@ void Player::Initialize(Model* model, ViewProjection* viewProjection, const Vect
 void Player::Update() {
 
 	PlayerMove();
+	PlayerTurn();
 
 	// 衝突判定を初期化
 	CollisionMapInfo collisionMapInfo;
@@ -27,11 +28,8 @@ void Player::Update() {
 	PlayerCollisionMove(collisionMapInfo);
 	OnGroundSwitching(collisionMapInfo);
 	HitWallCollisionMove(collisionMapInfo);
+
 	worldTransform_.UpdateMatrix();
-
-	PlayerTurn();
-
-	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
 }
 
@@ -378,4 +376,31 @@ void Player::CollisionMapInfoLeft(CollisionMapInfo& info) {
 
 float Player::EaseOutSine(float x) {
 	return cosf((x * std::numbers::pi_v<float>) / 2); 
+}
+
+Vector3 Player::GetWorldPosition() {
+
+	Vector3 worldPos;
+
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+}
+
+AABB Player::GetAABB() {
+	Vector3 worldPos = GetWorldPosition();
+
+	AABB aabb;
+
+	aabb.min = { worldPos.x - kWidth / 2.0f, worldPos.y - kHeight / 2.0f, worldPos.z - kWidth / 2.0f };
+	aabb.max = { worldPos.x + kWidth / 2.0f, worldPos.y + kHeight / 2.0f, worldPos.z + kWidth / 2.0f };
+
+	return aabb;
+}
+
+void Player::OnCollision(const Enemy* enemy) {
+	(void)enemy;
+	velocity_.y += kJumpAcceleration;
 }

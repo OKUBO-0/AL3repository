@@ -53,6 +53,8 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	void CheckAllCollisions();
+
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -93,6 +95,6 @@ private: // メンバ変数
 
 	// Enemy
 	Model* enemyModel_ = nullptr;
-	Enemy* enemy_ = nullptr;
 	std::list<Enemy*> enemies_;
+	// Enemy* enemy_ = nullptr;
 };

@@ -20,6 +20,12 @@ struct VertexData {
 	Vector2 texcoord;
 };
 
+struct AABB {
+
+	Vector3 min;
+	Vector3 max;
+};
+
 //回転
 Matrix4x4 MakeTranslateMatrix(const Vector3& translate);
 //拡大
@@ -59,3 +65,5 @@ Matrix4x4 MakeIdentity4x4();
 
 Vector3 Lerp(const Vector3& a, const Vector3& b, float t);
 float fLerp(float a, float b, float t);
+
+bool IsCollision(const AABB& aabb1, const AABB& aabb2);

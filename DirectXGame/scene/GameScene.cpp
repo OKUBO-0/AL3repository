@@ -14,7 +14,9 @@ GameScene::~GameScene() {
 	delete skydome_;
 	delete mapChipField_;
 	delete enemyModel_;
-	delete enemy_;
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -62,14 +64,13 @@ void GameScene::Initialize() {
 	player_->SetMapChipFiled(mapChipField_);
 
 	//Enemy
-	for (int32_t i = 0; i < 2; ++i) {
-		enemy_ = new Enemy();
-	    Vector3 enemyPostion = mapChipField_->GetMapChipPostionByIndex(10+i, 18+i);
-		enemy_->Initialize(enemyModel_, &viewProjection_, enemyPostion);
-
-		enemies_.push_back(enemy_);
-	}
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
+	for (int32_t i = 0; i < 3; ++i) {
+		Enemy* newEnemy = new Enemy();
+		Vector3 enemyPosition = mapChipField_->GetMapChipPostionByIndex(10 + i, 18);
+		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition);
+		enemies_.push_back(newEnemy);
+	}
 
 	// CameraController
 	CameraController::Rect cameraArea = { 0.0f, 100 - 12.0f, 6.0f, 6.0f };
@@ -84,9 +85,13 @@ void GameScene::Initialize() {
 void GameScene::Update() {
 	player_->Update();
 	cameraController_->Update();
-	if (!nullptr) {
-		enemy_->Update();
+	for (Enemy* enemy : enemies_) {
+		if (!nullptr) {
+			enemy->Update();
+		}
 	}
+
+	CheckAllCollisions();
 
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -147,6 +152,22 @@ void GameScene::GenerateBlocks() {
 	}
 }
 
+void GameScene::CheckAllCollisions() {
+
+	AABB aabb1, aabb2;
+
+	aabb1 = player_->GetAABB();
+
+	for (Enemy* enemy : enemies_) {
+		aabb2 = enemy->GetAABB();
+
+		if (IsCollision(aabb1, aabb2)) {
+			player_->OnCollision(enemy);
+			enemy->OnCollision(player_);
+		}
+	}
+}
+
 void GameScene::Draw() {
 
 	// コマンドリストの取得
@@ -180,8 +201,10 @@ void GameScene::Draw() {
 	// 天球の描画
 	skydome_->Draw();
 	// 敵の描画
-	if (!nullptr) {
-		enemy_->Draw();
+	for (Enemy* enemy : enemies_) {
+		if (!nullptr) {
+			enemy->Draw();
+		}
 	}
 
 	for (std::vector<WorldTransform*>& worldtransformBlockLine : worldTransformBlocks_) {

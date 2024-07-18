@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <numbers>
 #include <algorithm>
+#include "Matrix.h"
 
 enum class LRDirection {
 	kRight,
@@ -27,6 +28,7 @@ enum Corner {
 	kNumCorner    //要素数
 };
 
+class Enemy;
 class MapChipField;
 class Player {
 
@@ -69,6 +71,10 @@ public:
 	void CollisionMapInfoRight(CollisionMapInfo& info);
 	void CollisionMapInfoLeft(CollisionMapInfo& info);
 
+	Vector3 GetWorldPosition();
+	AABB GetAABB();
+	void OnCollision(const Enemy* enemy);
+
 private:
 	WorldTransform worldTransform_;             // ワールド変換データ
 	Model* model_ = nullptr;                    // モデル
@@ -90,7 +96,7 @@ private:
 	bool onGround_ = true;                                   // 接点状態フラグ
 	static inline const float kGravityAcceleration = 0.05f;  //重力加速度
 	static inline const float kLimitFallSpeed = 1.0f;        //最大落下速度
-	static inline const float kJumpAcceleration = 0.7f;      //ジャンプ初速
+	static inline const float kJumpAcceleration = 0.5f;      //ジャンプ初速
 
 	MapChipField* mapChipField_ = nullptr;
 	static inline const float kWidth = 0.8f;
