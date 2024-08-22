@@ -140,16 +140,6 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
     };
 
 	return center + offseetTable[static_cast<uint32_t>(corner)];
-
-	/*if (corner == kRightBottom) {
-	    return center + Vector3{+kWidth / 2.0f, -kHeight / 2.0f, 0};
-	} else if (corner == kLeftBottom){
-	    return center + Vector3{-kWidth / 2.0f, -kHeight / 2.0f, 0};
-	} else if (corner == kRightTop) {
-	    return center + Vector3{+kWidth / 2.0f, +kHeight / 2.0f, 0};
-	} else {
-	    return center + Vector3{-kWidth / 2.0f, +kHeight / 2.0f, 0};
-	}*/
 }
 
 void Player::PlayerCollisionMove(const CollisionMapInfo& info) {
@@ -409,10 +399,7 @@ AABB Player::GetAABB() {
 void Player::OnCollision(const Enemy* enemy) {
 
 	(void)enemy;
-
-	
 	velocity_.y += kJampAcceleration;
-	
 }
 
 float Player::EaseOutSine(float x) { return cosf((x * std::numbers::pi_v<float>) / 2); }

@@ -40,9 +40,8 @@ private:
 	//敵のアニメーション
 	static inline const float kWalkMotionAngleStart = 0.1f;//最初の角度
 	static inline const float kWalkMotionAngleEnd = 0.5f;//最後の角度
-	static inline const float kWalkMotionTime = 0.1f;//アニメーションの時間
+	static inline const float kWalkMotionTime = 0.5f;//アニメーションの時間
 	static inline const float kEnemyWidth = 0.8f;
 	static inline const float kEnemyHeight = 0.8f;
 	float walkTimer_ = 0.0f;
-	
 };
