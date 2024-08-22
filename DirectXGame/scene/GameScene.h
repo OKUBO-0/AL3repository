@@ -1,21 +1,21 @@
 #pragma once
 
 #include "Audio.h"
+#include "CameraController.h"
 #include "DebugCamera.h"
 #include "DirectXCommon.h"
 #include "Enemy.h"
 #include "Input.h"
 #include "MapChipField.h"
 #include "Model.h"
-#include "Player.h"
+#include "MyMath.h"
+#include "Player.h" 
 #include "Skydome.h"
 #include "Sprite.h"
-#include "Matrix.h"
 #include "ViewProjection.h"
 #include "WorldTransform.h"
-#include "CameraController.h"
+#include"DeathParticles.h"
 #include <vector>
-#include "SafeDelete.h"
 
 /// <summary>
 /// ゲームシーン
@@ -39,14 +39,14 @@ public: // メンバ関数
 	void Initialize();
 
 	/// <summary>
-	/// ブロックの表示
-	/// </summary>
-	void GenerateBlocks();
-
-	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
 	void Update();
+
+	/// <summary>
+	/// ブロックの生成
+	/// </summary>
+	void GenerateBlokcs();
 
 	/// <summary>
 	/// 描画
@@ -54,7 +54,6 @@ public: // メンバ関数
 	void Draw();
 
 	void CheckAllCollisions();
-
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -64,37 +63,43 @@ private: // メンバ変数
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
-	
+
+	ViewProjection viewProjection_; // ビュープロジェクション　ゲーム中に共通で一つ
+
 	// テクスチャハンドル
-	uint32_t textureHandle_ = 0;
+	uint32_t texturHandle_ = 0;
 
-	// 自キャラ
-	Player* player_ = nullptr;
-	Model* model_ = nullptr;
-	ViewProjection viewProjection_;
+	// Player
+	Model* model_ = nullptr;   // 3Dモデル
+	Player* player_ = nullptr; // 自機
 
-	// 縦横ブロック配列
-	Model* modelBlock_ = nullptr;
-	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+	// MapBlock
+	Model* blockModel_ = nullptr;
 
-	// デバッグカメラ
 	bool isDebugCameraActive_ = false;
 	DebugCamera* debugCamera_ = nullptr;
 
-	// 天球
+	// SkyDome
 	Skydome* skydome_ = nullptr;
 	Model* modelSkydome_ = nullptr;
-	
-	// マップチップフィールド
+	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
+
+	// MapChipField
 	MapChipField* mapChipField_;
 
-	// 追従カメラ
+	// CameraController
 	CameraController* cameraController_ = nullptr;
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
 
 	// Enemy
-	Model* enemyModel_ = nullptr;
-	std::list<Enemy*> enemies_;
-	// Enemy* enemy_ = nullptr;
+	std::list<Enemy*> enemies_;   // 敵たち
+	Model* enemyModel_ = nullptr; // 3Dモデル
+	int32_t enemynumber = 3;
+	// Enemy* enemy_ = nullptr;       // 敵
+
+	//死エフェクト
+	DeathParticles* deathParticles_ = nullptr;
+	Model* deathParticlesModel_= nullptr;
+	bool isDeathParticles = true;
 };

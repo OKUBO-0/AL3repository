@@ -1,4 +1,4 @@
-﻿#include "Skydome.h"
+#include "Skydome.h"
 
 void Skydome::Initialize(Model* model, ViewProjection* viewProjection) {
 
@@ -11,7 +11,4 @@ void Skydome::Initialize(Model* model, ViewProjection* viewProjection) {
 
 void Skydome::Update() {}
 
-void Skydome::Draw() {
-	// 3Dモデル描画
-	model_->Draw(worldTransform_, *viewProjection_);
-}
+void Skydome::Draw() { model_->Draw(worldTransform_, *viewProjection_); }

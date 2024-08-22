@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include <Model.h>
 #include "WorldTransform.h"
 #include <assert.h>
@@ -23,7 +23,9 @@ public:
 private:
 	//ワールド変換データ
 	WorldTransform worldTransform_;
-	ViewProjection* viewProjection_ = nullptr;
 	//モデル
 	Model* model_ = nullptr;
+	ViewProjection* viewProjection_ = nullptr;
+
+
 };
