@@ -399,7 +399,8 @@ AABB Player::GetAABB() {
 void Player::OnCollision(const Enemy* enemy) {
 
 	(void)enemy;
-	velocity_.y += kJampAcceleration;
+	//velocity_.y += kJampAcceleration;
+	isDead_ = true;
 }
 
 float Player::EaseOutSine(float x) { return cosf((x * std::numbers::pi_v<float>) / 2); }

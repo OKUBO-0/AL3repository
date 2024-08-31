@@ -85,19 +85,35 @@ void GameScene::Initialize() {
 	deathParticles_ = new DeathParticles;
 	deathParticlesModel_ = Model::CreateFromOBJ("deathParticle", true); // 3Dモデルの生成
 	deathParticles_->Initialize(playerPostion, deathParticlesModel_, &viewProjection_);
+
+	// phase
+	phase_ = Phase::kplay;
 }
 
 void GameScene::Update() {
+
+	ChangePhase();
+
+	switch (phase_) {
+
+	case Phase::kplay:
+		break;
+
+	case Phase::kDeath:
+		break;
+	}
+
 	player_->Update();
 
-	if (isDeathParticles) {
-
+	if (player_->GetIsDead_() == true) {
 		deathParticles_->Update();
 	}
 
-	cameraController_->Update();
-	for (Enemy* enemy : enemies_) {
+	if (player_->GetIsDead_() == false) {
+		cameraController_->Update();
+	}
 
+	for (Enemy* enemy : enemies_) {
 		if (!nullptr) {
 			enemy->Update();
 		}
@@ -113,6 +129,7 @@ void GameScene::Update() {
 			worldTransformBlock->TransferMatrix();
 		}
 	}
+
 	CheckAllCollisions();
 #ifdef _DEBUG
 	if (input_->TriggerKey(DIK_C)) {
@@ -192,15 +209,17 @@ void GameScene::Draw() {
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
 
-	player_->Draw();
-	for (Enemy* enemy : enemies_) {
+	if (player_->GetIsDead_() == false) {
+		player_->Draw();
+	}
 
+	for (Enemy* enemy : enemies_) {
 		if (!nullptr) {
 			enemy->Draw();
 		}
 	}
-	if (isDeathParticles) {
 
+	if (player_->GetIsDead_() == true) {
 		deathParticles_->Draw();
 	}
 
@@ -244,5 +263,29 @@ void GameScene::CheckAllCollisions() {
 			player_->OnCollision(enemy);
 			enemy->OnCollision(player_);
 		}
+	}
+}
+
+void GameScene::ChangePhase() {
+
+	switch (phase_) {
+
+	case Phase::kplay:
+
+		if (player_->GetIsDead_() == true) {
+			// 死亡演出フェーズに切り替え
+			phase_ = Phase::kDeath;
+			// 自キャラの座標を取得
+			const Vector3& deathParticlesPosition = player_->GetWorldPosition();
+			deathParticles_->Initialize(deathParticlesPosition, deathParticlesModel_, &viewProjection_);
+		}
+
+		break;
+
+	case Phase::kDeath:
+		if (deathParticles_ && deathParticles_->GetIsFinished()) {
+			finished_ = true;
+		}
+		break;
 	}
 }

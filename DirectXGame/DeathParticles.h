@@ -17,6 +17,8 @@ public:
 
 	void Draw();
 
+	bool GetIsFinished() const { return isFinished_; }
+
 private:
 
 	Model* model_ = nullptr;

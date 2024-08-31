@@ -17,6 +17,12 @@
 #include"DeathParticles.h"
 #include <vector>
 
+
+enum class Phase {
+	kplay,
+	kDeath,
+};
+
 /// <summary>
 /// ゲームシーン
 /// </summary>
@@ -53,7 +59,13 @@ public: // メンバ関数
 	/// </summary>
 	void Draw();
 
+	//当たり判定のまとまり
 	void CheckAllCollisions();
+
+	//フェーズ切り替え
+	void ChangePhase();
+
+	bool  GetIsFinished() const { return finished_; }
 
 private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
@@ -101,5 +113,9 @@ private: // メンバ変数
 	//死エフェクト
 	DeathParticles* deathParticles_ = nullptr;
 	Model* deathParticlesModel_= nullptr;
-	bool isDeathParticles = true;
+
+	//フェーズ
+	Phase phase_;
+
+	bool finished_ = false;
 };

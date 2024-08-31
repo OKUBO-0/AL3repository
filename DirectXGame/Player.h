@@ -69,6 +69,8 @@ public:
 	AABB GetAABB();
 	void OnCollision(const Enemy*enemy);
 
+	bool GetIsDead_() const { return isDead_; }
+
 private:
 	WorldTransform worldTransform_;            // ワールド変換データ
 	Model* model_ = nullptr;                   // モデル
@@ -96,4 +98,7 @@ private:
 	static inline const float kAttenuationLanding = 0.1f;
 	static inline const float kCollisionsmallnumber = 0.1f;
 	static inline const float kAttenuationWall = 0.1f;
+
+	//死んだ
+	bool isDead_ = false;
 };

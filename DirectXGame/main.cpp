@@ -5,7 +5,73 @@
 #include "ImGuiManager.h"
 #include "PrimitiveDrawer.h"
 #include "TextureManager.h"
+#include "TitleScene.h"
 #include "WinApp.h"
+
+GameScene* gameScene = nullptr;
+TitleScene* titeleScene = nullptr;
+
+enum class Scene {
+	kUnknown = 0,
+	kTitle,
+	kGame,
+};
+Scene scene = Scene::kUnknown;
+
+void ChengeScene() {
+
+	switch (scene) {
+	case Scene::kTitle:
+		if (titeleScene->GetISFinished()) {
+			// sceneの変更
+			scene = Scene::kGame;
+			// 旧シーンかいほう
+			delete titeleScene;
+			titeleScene = nullptr;
+			// 新シーンの生成と初期化
+			gameScene = new GameScene;
+			gameScene->Initialize();
+		}
+		break;
+
+	case Scene::kGame:
+		if (gameScene->GetIsFinished()) {
+			// sceneの変更
+			scene = Scene::kTitle;
+			// 旧シーンかいほう
+			delete gameScene;
+			titeleScene = nullptr;
+			// 新シーンの生成と初期化
+			titeleScene = new TitleScene;
+			titeleScene->Initialize();
+		}
+		break;
+	}
+}
+
+void UpdateScene() {
+
+	switch (scene) {
+	case Scene::kTitle:
+		titeleScene->Update();
+		break;
+	case Scene::kGame:
+		gameScene->Update();
+		break;
+	}
+}
+
+void DrawScene() {
+
+	switch (scene) {
+	case Scene::kTitle:
+		titeleScene->Draw();
+		break;
+	case Scene::kGame:
+		gameScene->Draw();
+		break;
+	}
+}
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
@@ -16,7 +82,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Audio* audio = nullptr;
 	AxisIndicator* axisIndicator = nullptr;
 	PrimitiveDrawer* primitiveDrawer = nullptr;
-	GameScene* gameScene = nullptr;
 
 	// ゲームウィンドウの作成
 	win = WinApp::GetInstance();
@@ -57,9 +122,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	primitiveDrawer->Initialize();
 #pragma endregion
 
-	// ゲームシーンの初期化
-	gameScene = new GameScene();
-	gameScene->Initialize();
+	scene = Scene::kTitle;
+	titeleScene = new TitleScene();
+	titeleScene->Initialize();
+
+	//// ゲームシーンの初期化
+	//gameScene = new GameScene();
+	//gameScene->Initialize();
 
 	// メインループ
 	while (true) {
@@ -73,16 +142,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		// 入力関連の毎フレーム処理
 		input->Update();
 		// ゲームシーンの毎フレーム処理
-		gameScene->Update();
+		//gameScene->Update();
+		// タイトル
+		ChengeScene();
+
+		UpdateScene();
 		// 軸表示の更新
 		axisIndicator->Update();
 		// ImGui受付終了
 		imguiManager->End();
-
 		// 描画開始
 		dxCommon->PreDraw();
 		// ゲームシーンの描画
 		gameScene->Draw();
+		// タイトル
+		DrawScene();
 		// 軸表示の描画
 		axisIndicator->Draw();
 		// プリミティブ描画のリセット
@@ -95,6 +169,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// 各種解放
 	delete gameScene;
+	delete titeleScene;
 	// 3Dモデル解放
 	Model::StaticFinalize();
 	audio->Finalize();
