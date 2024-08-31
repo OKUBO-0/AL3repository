@@ -28,9 +28,9 @@ void Enemy::Update() {
 	worldTransform_.translation_.z += velocity_.z;
 
 	// 位置が一定の範囲を超えたらリセット
-	const float resetPositionX = -10.0f;  // リセットする位置
-	const Vector3 resetPosition = { 10.0f, 0.0f, 0.0f }; // リセット後の位置
-	const float speedIncreaseFactor = 1.2f; // 速度の増加率
+	const float resetPositionX = 1.0f;  // リセットする位置
+	const Vector3 resetPosition = { 10.0f, 1.0f, 0.0f }; // リセット後の位置
+	const float speedIncreaseFactor = 2.0f; // 速度の増加率
 
 	if (worldTransform_.translation_.x < resetPositionX) {
 		worldTransform_.translation_ = resetPosition;
