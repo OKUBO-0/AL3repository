@@ -27,6 +27,15 @@ void Enemy::Update() {
 	worldTransform_.translation_.y += velocity_.y;
 	worldTransform_.translation_.z += velocity_.z;
 
+	// 位置が一定の範囲を超えたらリセット
+	const float resetPositionX = 1.0f;  // リセットする位置
+	const float speedIncreaseFactor = 2.0f; // 速度の増加率
+
+	if (worldTransform_.translation_.x < resetPositionX) {
+		worldTransform_.translation_.x = 17.0f; // リセット後のX座標
+		velocity_.x *= speedIncreaseFactor; // 速度を増加させる
+	}
+
 	worldTransform_.UpdateMatrix();
 	// 行列を定数バッファに転送
 	worldTransform_.TransferMatrix();
