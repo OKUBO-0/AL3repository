@@ -15,6 +15,7 @@ enum class Scene {
 	kUnknown = 0,
 	kTitle,
 	kGame,
+
 };
 Scene scene = Scene::kUnknown;
 
@@ -33,7 +34,6 @@ void ChengeScene() {
 			gameScene->Initialize();
 		}
 		break;
-
 	case Scene::kGame:
 		if (gameScene->GetIsFinished()) {
 			// sceneの変更
@@ -45,6 +45,7 @@ void ChengeScene() {
 			titeleScene = new TitleScene;
 			titeleScene->Initialize();
 		}
+
 		break;
 	}
 }
@@ -127,8 +128,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	titeleScene->Initialize();
 
 	//// ゲームシーンの初期化
-	//gameScene = new GameScene();
-	//gameScene->Initialize();
+	// gameScene = new GameScene();
+	// gameScene->Initialize();
 
 	// メインループ
 	while (true) {
@@ -141,8 +142,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		imguiManager->Begin();
 		// 入力関連の毎フレーム処理
 		input->Update();
-		// ゲームシーンの毎フレーム処理
-		//gameScene->Update();
+		//// ゲームシーンの毎フレーム処理
+		// gameScene->Update();
 		// タイトル
 		ChengeScene();
 
@@ -151,10 +152,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		axisIndicator->Update();
 		// ImGui受付終了
 		imguiManager->End();
+
 		// 描画開始
 		dxCommon->PreDraw();
-		// ゲームシーンの描画
-		gameScene->Draw();
+		//// ゲームシーンの描画
+		// gameScene->Draw();
 		// タイトル
 		DrawScene();
 		// 軸表示の描画
@@ -178,6 +180,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	// ゲームウィンドウの破棄
 	win->TerminateGameWindow();
+
 
 	return 0;
 }
