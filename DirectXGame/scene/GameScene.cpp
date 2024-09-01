@@ -38,6 +38,13 @@ void GameScene::Initialize() {
 	// テクスチャ読み込み
 	texturHandle_ = TextureManager::Load("pralyer.png");
 
+	//// サウンドデータの読み込み
+	//soundDataHandle_ = audio_->LoadWave("st005.wav");
+
+	//// 音声再生
+	//audio_->PlayWave(soundDataHandle_);
+	//voiceHandle_ = audio_->PlayWave(soundDataHandle_, false);
+
 	// ビュープロジェクションの初期化
 	viewProjection_.Initialize();
 
@@ -68,7 +75,7 @@ void GameScene::Initialize() {
 	enemyModel_ = Model::CreateFromOBJ("enemy", true);
 	for (int32_t i = 0; i < enemynumber; i++) {
 		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipField_->GetMapChipPostionByIndex(17 - i - i, 18 - i -i);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPostionByIndex(17 - i - i - i, 18 - i -i);
 		newEnemy->Initialize(enemyModel_, &viewProjection_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}

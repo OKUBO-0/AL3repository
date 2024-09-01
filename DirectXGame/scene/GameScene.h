@@ -81,6 +81,12 @@ private: // メンバ変数
 	// テクスチャハンドル
 	uint32_t texturHandle_ = 0;
 
+	//// サウンドデータハンドル
+	//uint32_t soundDataHandle_ = 0;
+
+	//// 音声再生ハンドル
+	//uint32_t voiceHandle_ = 0;
+
 	// Player
 	Model* model_ = nullptr;   // 3Dモデル
 	Player* player_ = nullptr; // 自機

@@ -52,6 +52,7 @@ void TitleScene::Draw() {
 	// 3Dオブジェクト描画前処理
 	Model::PreDraw(commandList);
 
+
 	model_->Draw(worldTransform_, viewProjection_);
 
 	/// <summary>

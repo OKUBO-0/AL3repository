@@ -29,11 +29,17 @@ void Enemy::Update() {
 
 	// 位置が一定の範囲を超えたらリセット
 	const float resetPositionX = 1.0f;  // リセットする位置
-	const float speedIncreaseFactor = 2.0f; // 速度の増加率
+	const float speedIncreaseFactor = 1.5f; // 速度の増加率
+	const float maxSpeed = -0.2f;
 
 	if (worldTransform_.translation_.x < resetPositionX) {
 		worldTransform_.translation_.x = 17.0f; // リセット後のX座標
-		velocity_.x *= speedIncreaseFactor; // 速度を増加させる
+		if (velocity_.x > maxSpeed) {
+			velocity_.x *= speedIncreaseFactor; // 速度を増加させる
+			if (velocity_.x < maxSpeed) {
+				velocity_.x = maxSpeed; // 速度が最大値を超えないようにする
+			}
+		}
 	}
 
 	worldTransform_.UpdateMatrix();
