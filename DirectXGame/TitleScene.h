@@ -7,7 +7,6 @@
 #include "WorldTransform.h"
 #include <assert.h>
 #include "ViewProjection.h"
-#include "imgui.h"
 
 class TitleScene {
 public:
